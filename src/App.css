@@ -1,0 +1,33 @@
+* {
+  border: none;
+  margin: 0;
+}
+
+.containers {
+  display: flex;
+  flex-direction: row;
+
+}
+
+.navBar {
+  min-height: 700px;
+}
+
+.mainContainer {
+  width: 100%;
+}
+
+.postCard{
+  border: solid black 1px;
+    margin: 21px;
+}
+
+.createPostForm{
+      margin: 20px;
+    border: solid black 1px;
+    padding: 25px
+}
+
+.postTag{
+  margin: 0px 1px;
+}
