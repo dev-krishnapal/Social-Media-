@@ -2,6 +2,7 @@ import { useReducer, useContext, createContext } from "react";
 export const PostList = createContext({
   postList: [],
   addPost: () => {},
+  addPosts: () => {},
   deletePost: () => {},
 });
 
@@ -15,10 +16,12 @@ const postListReducer = (currentPostList, action) => {
         title: action.payload.title,
         body: action.payload.body,
         userId: action.payload.userId,
-        reactiion: action.payload.reaction,
+        reactions: action.payload.reactions,
         tags: action.payload.tags,
       },
     ];
+  } else if (action.type == "ADD_POSTS") {
+    newPostList = action.payload.posts;
   }
   if (action.type === "DELETE_POST") {
     newPostList = currentPostList.filter(
@@ -29,10 +32,7 @@ const postListReducer = (currentPostList, action) => {
 };
 
 const PostListPriovider = ({ children }) => {
-  const [postList, dispatchPostList] = useReducer(
-    postListReducer,
-    DEFAULT_POST_LIST,
-  );
+  const [postList, dispatchPostList] = useReducer(postListReducer, []);
 
   const addPost = (userId, postTitle, postBody, reactions, tags) => {
     if (!userId || !postTitle || !postBody || !reactions || !tags) {
@@ -46,8 +46,16 @@ const PostListPriovider = ({ children }) => {
         title: postTitle,
         body: postBody,
         userId: userId,
-        reaction: reactions,
+        reactions: reactions,
         tags: tags,
+      },
+    });
+  };
+  const addPosts = (posts) => {
+    dispatchPostList({
+      type: "ADD_POSTS",
+      payload: {
+        posts: posts,
       },
     });
   };
@@ -61,7 +69,7 @@ const PostListPriovider = ({ children }) => {
   };
 
   return (
-    <PostList.Provider value={{ postList, addPost, deletePost }}>
+    <PostList.Provider value={{ postList, addPost, addPosts, deletePost }}>
       {children}
     </PostList.Provider>
   );
@@ -72,7 +80,7 @@ const DEFAULT_POST_LIST = [
     id: "1",
     title: "Doing Coding",
     body: "asdkbcjuasvdc bandvcuaghedcf ",
-    reaction: "3",
+    reactions: "3",
     userId: "user-3",
     tags: ["coding", "Building"],
   },
@@ -80,7 +88,7 @@ const DEFAULT_POST_LIST = [
     id: "2",
     title: "Doing Nothing",
     body: "asdkbcjuasvdc bandvcuaghedcf ",
-    reaction: "9",
+    reactions: "9",
     userId: "user-4",
     tags: ["coding", "Building"],
   },
