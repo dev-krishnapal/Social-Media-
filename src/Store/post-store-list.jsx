@@ -1,8 +1,15 @@
-import { useReducer, useContext, createContext } from "react";
+import { useCallback } from "react";
+import {
+  useReducer,
+  useContext,
+  createContext,
+  useState,
+  useEffect,
+} from "react";
 export const PostList = createContext({
   postList: [],
   addPost: () => {},
-  addPosts: () => {},
+
   deletePost: () => {},
 });
 
@@ -33,6 +40,18 @@ const postListReducer = (currentPostList, action) => {
 
 const PostListPriovider = ({ children }) => {
   const [postList, dispatchPostList] = useReducer(postListReducer, []);
+  const [featching, setFeatching] = useState(false);
+
+  useEffect(() => {
+    setFeatching(true);
+    fetch("https://dummyjson.com/posts")
+      .then((res) => res.json())
+
+      .then((data) => {
+        addPosts(data.posts);
+        setFeatching(false);
+      });
+  }, []);
 
   const addPost = (userId, postTitle, postBody, reactions, tags) => {
     if (!userId || !postTitle || !postBody || !reactions || !tags) {
@@ -51,14 +70,14 @@ const PostListPriovider = ({ children }) => {
       },
     });
   };
-  const addPosts = (posts) => {
+  const addPosts = useCallback((posts) => {
     dispatchPostList({
       type: "ADD_POSTS",
       payload: {
         posts: posts,
       },
     });
-  };
+  }, []);
   const deletePost = (id) => {
     dispatchPostList({
       type: "DELETE_POST",
@@ -69,29 +88,31 @@ const PostListPriovider = ({ children }) => {
   };
 
   return (
-    <PostList.Provider value={{ postList, addPost, addPosts, deletePost }}>
+    <PostList.Provider
+      value={{ postList, addPost, addPosts, deletePost, featching }}
+    >
       {children}
     </PostList.Provider>
   );
 };
 
-const DEFAULT_POST_LIST = [
-  {
-    id: "1",
-    title: "Doing Coding",
-    body: "asdkbcjuasvdc bandvcuaghedcf ",
-    reactions: "3",
-    userId: "user-3",
-    tags: ["coding", "Building"],
-  },
-  {
-    id: "2",
-    title: "Doing Nothing",
-    body: "asdkbcjuasvdc bandvcuaghedcf ",
-    reactions: "9",
-    userId: "user-4",
-    tags: ["coding", "Building"],
-  },
-];
+// const DEFAULT_POST_LIST = [
+//   {
+//     id: "1",
+//     title: "Doing Coding",
+//     body: "asdkbcjuasvdc bandvcuaghedcf ",
+//     reactions: "3",
+//     userId: "user-3",
+//     tags: ["coding", "Building"],
+//   },
+//   {
+//     id: "2",
+//     title: "Doing Nothing",
+//     body: "asdkbcjuasvdc bandvcuaghedcf ",
+//     reactions: "9",
+//     userId: "user-4",
+//     tags: ["coding", "Building"],
+//   },
+// ];
 
 export default PostListPriovider;

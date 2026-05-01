@@ -1,12 +1,16 @@
-const Nav = ({ selectedTab, setSelectedTab }) => {
+import { useState } from "react";
+import { Link } from "react-router-dom";
+
+const Nav = () => {
+  const [sidebarClass, setSidebarClass] = useState(true);
   return (
     <div
       className="d-flex flex-column flex-shrink-0 p-3 text-bg-dark navBar"
       style={{ width: "280px" }}
     >
       {" "}
-      <a
-        href="/"
+      <Link
+        to="/"
         className="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none"
       >
         {" "}
@@ -18,21 +22,23 @@ const Nav = ({ selectedTab, setSelectedTab }) => {
         >
           <use xlinkHref="#bootstrap"></use>
         </svg>{" "}
-        <span className="fs-4">Sidebar</span>{" "}
-      </a>{" "}
+        <span className="fs-4">DamoderDasMODI</span>{" "}
+      </Link>{" "}
       <hr />{" "}
       <ul className="nav nav-pills flex-column mb-auto">
         {" "}
         <li
           className="nav-item"
           onClick={() => {
-            setSelectedTab("Home");
+            setSidebarClass(true);
+
+            console.log(sidebarClass);
           }}
         >
           {" "}
-          <a
-            href="#"
-            className={`nav-link text-white ${selectedTab === "Home" && "active"}`}
+          <Link
+            to="/"
+            className={`nav-link text-white ${sidebarClass ? "active" : ""}`}
             aria-current="page"
           >
             {" "}
@@ -45,17 +51,19 @@ const Nav = ({ selectedTab, setSelectedTab }) => {
               <use xlinkHref="#home"></use>
             </svg>
             Home
-          </a>{" "}
+          </Link>{" "}
         </li>{" "}
         <li
           onClick={() => {
-            setSelectedTab("CreatePost");
+            setSidebarClass(false);
+
+            console.log(sidebarClass);
           }}
         >
           {" "}
-          <a
-            href="#"
-            className={`nav-link text-white ${selectedTab === "CreatePost" && "active"}`}
+          <Link
+            to="/create-post"
+            className={`nav-link text-white ${!sidebarClass ? "active" : ""}`}
           >
             {" "}
             <svg
@@ -67,7 +75,7 @@ const Nav = ({ selectedTab, setSelectedTab }) => {
               <use xlinkHref="#speedometer2"></use>
             </svg>
             CreatePost
-          </a>{" "}
+          </Link>{" "}
         </li>{" "}
       </ul>{" "}
       <div className="dropdown">

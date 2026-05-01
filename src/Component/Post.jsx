@@ -16,7 +16,6 @@ const Post = ({ post }) => {
         <h5 className="card-title">{post.title} </h5>
         <p className="card-text">{post.body}</p>
         <div className="alert alert-info">
-          {console.log(post.reactions)}
           Total no of people reacted are {post.reactions.likes}
         </div>
         {post.tags.map((tag) => (
